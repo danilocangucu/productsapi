@@ -15,12 +15,12 @@ Before you begin, ensure you have met the following requirements:
 1. Clone this repository:
 
    ```shell
-   git clone https://github.com/danilocangucu/productsapi.git
+   git clone https://github.com/danilocangucu/spring-boot-mongodb-products-api.git
 
 2. Change to the project directory:
 
    ```shell
-   cd productsapi
+   cd spring-boot-mongodb-products-api
    ```
 
 3. Configure MongoDB connection in `src/main/resources/application.properties`:
@@ -70,7 +70,7 @@ To run tests for this project, follow these steps:
 2. Then, open another terminal window and navigate to the project directory:
 
    ```shell
-   cd productsapi
+   cd spring-boot-mongodb-products-api
    ```
 
 3. Run the following command to execute tests:
