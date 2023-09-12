@@ -1,4 +1,4 @@
-# Spring Boot + MongoDB Products API
+# Spring + MongoDB Atlas Shop API
 
 This is a project that builds a RESTful API using Spring Boot and MongoDB.
 
@@ -15,12 +15,12 @@ Before you begin, ensure you have met the following requirements:
 1. Clone this repository:
 
    ```shell
-   git clone https://github.com/danilocangucu/spring-boot-mongodb-products-api.git
+   git clone https://github.com/danilocangucu/spring-mongodb-atlas-shop-api.git
 
 2. Change to the project directory:
 
    ```shell
-   cd spring-boot-mongodb-products-api
+   cd spring-mongodb-atlas-shop-api
    ```
 
 3. Configure MongoDB connection in `src/main/resources/application.properties`:
@@ -40,7 +40,10 @@ Before you begin, ensure you have met the following requirements:
 
 ## API Endpoints
 
-- **GET /products**: Retrieve a list of products. The response excludes the "userId" field.
+- **GET /public/products**: Retrieve a list of products. The response excludes the "userId" field.
+- **POST /public/register**: Receives data to create a new user.
+- **POST /public/authenticate**: Receives data to authenticate an existing user. Responds with a valid JWT.
+- **POST /private/newproduct**: Receives data to create a new product. Responds with created product.
 
 ## MongoDB Settings
 
