@@ -1,8 +1,8 @@
-package info.danilocangucu.products.repository;
+package info.danilocangucu.shop.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import info.danilocangucu.products.model.Product;
+import info.danilocangucu.shop.models.Product;
 
 public interface ProductRepository extends MongoRepository<Product, String> {
 }

@@ -11,12 +11,12 @@ import org.springframework.http.ResponseEntity;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
-import info.danilocangucu.products.ProductsApplication;
+import info.danilocangucu.shop.ShopApplication;
 import net.minidev.json.JSONArray;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ProductsApplication.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ShopApplication.class)
 @AutoConfigureMockMvc
 class ProductsApplicationTests {
 

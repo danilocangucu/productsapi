@@ -1,23 +1,39 @@
-package info.danilocangucu.products.model;
-import info.danilocangucu.products.Views;
+package info.danilocangucu.shop.models;
+import info.danilocangucu.shop.Views;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "products")
 public class Product {
     @Id
     private String id;
-    @JsonView(Views.Api.class)
+    @JsonView(Views.Products.class)
     private String name;
-    @JsonView(Views.Api.class)
+    @JsonView(Views.Products.class)
     private String description;
-    @JsonView(Views.Api.class)
+    @JsonView(Views.Products.class)
     private Double price;
     
     private String userId;
+
+    public Product(String name, String description, Double price, String userId) {
+        super();
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.userId = userId;
+    }
 
     public String getId() {
         return this.id;
