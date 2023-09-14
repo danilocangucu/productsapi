@@ -1,6 +1,9 @@
 package info.danilocangucu.shop.models;
+
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import org.springframework.data.annotation.Id;
@@ -13,6 +16,8 @@ import info.danilocangucu.shop.views.PublicProductView;
 
 @Data
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @Document(collection = "products")
 public class Product {
@@ -34,46 +39,6 @@ public class Product {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.userId = userId;
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Double getPrice() {
-        return this.price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public String getUserId() {
-        return this.userId;
-    }
-
-    public void setUserId(String userId) {
         this.userId = userId;
     }
 
