@@ -1,6 +1,4 @@
 package info.danilocangucu.shop.models;
-import info.danilocangucu.shop.Views;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,25 +8,29 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import info.danilocangucu.shop.views.CreatedProductView;
+import info.danilocangucu.shop.views.PublicProductView;
+
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Document(collection = "products")
 public class Product {
     @Id
+    @JsonView(CreatedProductView.class)
     private String id;
-    @JsonView(Views.Products.class)
+    @JsonView(PublicProductView.class)
     private String name;
-    @JsonView(Views.Products.class)
+    @JsonView(PublicProductView.class)
     private String description;
-    @JsonView(Views.Products.class)
+    @JsonView(PublicProductView.class)
     private Double price;
     
     private String userId;
 
-    public Product(String name, String description, Double price, String userId) {
+    public Product(String id, String name, String description, Double price, String userId) {
         super();
+        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
@@ -37,6 +39,10 @@ public class Product {
 
     public String getId() {
         return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

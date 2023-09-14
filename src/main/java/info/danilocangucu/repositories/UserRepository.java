@@ -1,4 +1,4 @@
-package info.danilocangucu.shop.repository;
+package info.danilocangucu.shop.repositories;
 
 import java.util.Optional;
 

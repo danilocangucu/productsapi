@@ -1,17 +1,15 @@
-package info.danilocangucu.shop.controllers.services;
+package info.danilocangucu.shop.services;
 
 import org.springframework.stereotype.Service;
 
 import info.danilocangucu.shop.configs.JwtService;
 import info.danilocangucu.shop.models.Product;
 import info.danilocangucu.shop.models.User;
-import info.danilocangucu.shop.repository.ProductRepository;
-import info.danilocangucu.shop.repository.UserRepository;
+import info.danilocangucu.shop.repositories.ProductRepository;
+import info.danilocangucu.shop.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
-
-import org.modelmapper.ModelMapper;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +17,6 @@ public class ProductService {
     
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-    private final ModelMapper productMapper = new ModelMapper();
     private final JwtService jwtService;
     
     public Product save(Product request) {
@@ -31,7 +28,7 @@ public class ProductService {
             .build();
 
         Product savedProduct = productRepository.save(product);
-        return productMapper.map(savedProduct, Product.class);
+        return savedProduct;
     }
 
     public String getUserIdFromHeader(String authHeader) {

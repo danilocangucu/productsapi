@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import info.danilocangucu.shop.configs.JwtService;
 import info.danilocangucu.shop.models.User;
-import info.danilocangucu.shop.repository.UserRepository;
+import info.danilocangucu.shop.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
