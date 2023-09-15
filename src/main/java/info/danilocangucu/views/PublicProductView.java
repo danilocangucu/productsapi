@@ -1,3 +1,3 @@
-package info.danilocangucu.shop.views;
+package info.danilocangucu.views;
 
 public interface PublicProductView {}

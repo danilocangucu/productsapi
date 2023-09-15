@@ -1,4 +1,4 @@
-package info.danilocangucu.shop.configs;
+package info.danilocangucu.configs;
 
 import java.io.IOException;
 

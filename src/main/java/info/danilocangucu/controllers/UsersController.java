@@ -1,28 +1,6 @@
 package info.danilocangucu.controllers;
 
-import java.util.List;
-import java.util.Optional;
-
-import java.net.URI;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import com.fasterxml.jackson.annotation.JsonView;
-
-import org.springframework.data.domain.Pageable;
-
 import info.danilocangucu.models.Product;
 import info.danilocangucu.repositories.ProductRepository;
 import info.danilocangucu.repositories.UserRepository;
@@ -30,13 +8,23 @@ import info.danilocangucu.services.ProductService;
 import info.danilocangucu.views.CreatedProductView;
 import info.danilocangucu.views.PublicProductView;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
-public class ProductsController {
+public class UsersController {
 
-    private final ProductService productService;
+    private final UserService userService;
 
     @Autowired
     ProductRepository productRepository;
