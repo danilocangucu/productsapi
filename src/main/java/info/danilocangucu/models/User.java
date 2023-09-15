@@ -1,4 +1,4 @@
-package info.danilocangucu.shop.models;
+package info.danilocangucu.models;
 
 import java.util.Collection;
 import java.util.List;

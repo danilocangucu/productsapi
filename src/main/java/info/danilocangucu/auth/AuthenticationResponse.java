@@ -1,4 +1,4 @@
-package info.danilocangucu.shop.auth;
+package info.danilocangucu.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

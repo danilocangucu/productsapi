@@ -1,13 +1,13 @@
-package info.danilocangucu.shop.auth;
+package info.danilocangucu.auth;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import info.danilocangucu.shop.configs.JwtService;
-import info.danilocangucu.shop.models.User;
-import info.danilocangucu.shop.repositories.UserRepository;
+import info.danilocangucu.configs.JwtService;
+import info.danilocangucu.models.User;
+import info.danilocangucu.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

@@ -1,4 +1,4 @@
-package info.danilocangucu.shop.models;
+package info.danilocangucu.models;
 
 import lombok.Builder;
 import lombok.Data;
@@ -11,8 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import info.danilocangucu.shop.views.CreatedProductView;
-import info.danilocangucu.shop.views.PublicProductView;
+import info.danilocangucu.views.CreatedProductView;
+import info.danilocangucu.views.PublicProductView;
 
 @Data
 @Builder

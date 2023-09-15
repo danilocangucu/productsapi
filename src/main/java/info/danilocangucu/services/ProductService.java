@@ -1,12 +1,12 @@
-package info.danilocangucu.shop.services;
+package info.danilocangucu.services;
 
 import org.springframework.stereotype.Service;
 
-import info.danilocangucu.shop.configs.JwtService;
-import info.danilocangucu.shop.models.Product;
-import info.danilocangucu.shop.models.User;
-import info.danilocangucu.shop.repositories.ProductRepository;
-import info.danilocangucu.shop.repositories.UserRepository;
+import info.danilocangucu.configs.JwtService;
+import info.danilocangucu.models.Product;
+import info.danilocangucu.models.User;
+import info.danilocangucu.repositories.ProductRepository;
+import info.danilocangucu.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;

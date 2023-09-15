@@ -1,4 +1,4 @@
-package info.danilocangucu.shop.controllers;
+package info.danilocangucu.controllers;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,12 +23,12 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import org.springframework.data.domain.Pageable;
 
-import info.danilocangucu.shop.models.Product;
-import info.danilocangucu.shop.repositories.ProductRepository;
-import info.danilocangucu.shop.repositories.UserRepository;
-import info.danilocangucu.shop.services.ProductService;
-import info.danilocangucu.shop.views.CreatedProductView;
-import info.danilocangucu.shop.views.PublicProductView;
+import info.danilocangucu.models.Product;
+import info.danilocangucu.repositories.ProductRepository;
+import info.danilocangucu.repositories.UserRepository;
+import info.danilocangucu.services.ProductService;
+import info.danilocangucu.views.CreatedProductView;
+import info.danilocangucu.views.PublicProductView;
 import lombok.RequiredArgsConstructor;
 
 @RestController

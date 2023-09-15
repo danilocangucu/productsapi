@@ -1,4 +1,4 @@
-package info.danilocangucu.shop.controllers;
+package info.danilocangucu.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import info.danilocangucu.shop.auth.AuthenticationRequest;
-import info.danilocangucu.shop.auth.AuthenticationResponse;
-import info.danilocangucu.shop.auth.AuthenticationService;
-import info.danilocangucu.shop.auth.RegisterRequest;
+import info.danilocangucu.auth.AuthenticationRequest;
+import info.danilocangucu.auth.AuthenticationResponse;
+import info.danilocangucu.auth.AuthenticationService;
+import info.danilocangucu.auth.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
