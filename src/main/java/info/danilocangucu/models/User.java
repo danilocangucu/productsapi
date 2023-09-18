@@ -3,8 +3,12 @@ package info.danilocangucu.models;
 import java.util.Collection;
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
+
 import com.fasterxml.jackson.annotation.JsonView;
-import info.danilocangucu.views.CreatedProductView;
 import info.danilocangucu.views.UserView;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,10 +33,20 @@ import lombok.NoArgsConstructor;
 public class User implements UserDetails {
     @Id
     private String id;
+    @NotNull
+    @NotBlank
+    @Size(min=1, max=20)
     @JsonView(UserView.class)
     private String name;
+    @NotNull
+    @NotBlank
+    @Email
+    @Size(min=1, max=40)
     @JsonView(UserView.class)
     private String email;
+    @NotNull
+    @NotBlank
+    @Size(min=1, max=20)
     private String password;
     @JsonView(UserView.class)
     private String role;
