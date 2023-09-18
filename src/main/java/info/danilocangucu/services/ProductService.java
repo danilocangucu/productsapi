@@ -27,14 +27,6 @@ public class ProductService {
             .userId(request.getUserId())
             .build();
 
-        Product savedProduct = productRepository.save(product);
-        return savedProduct;
-    }
-
-    public String getUserIdFromHeader(String authHeader) {
-        String userEmail = jwtService.extractSubject(authHeader.substring(7));
-        Optional<User> user = userRepository.findByEmail(userEmail);
-        String userId = user.map(User::getId).orElse(null);
-        return userId;
+        return productRepository.save(product);
     }
 }

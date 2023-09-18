@@ -1,10 +1,6 @@
 package info.danilocangucu.models;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,6 +15,7 @@ import info.danilocangucu.views.PublicProductView;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "products")
 public class Product {
     @Id
@@ -30,16 +27,6 @@ public class Product {
     private String description;
     @JsonView(PublicProductView.class)
     private Double price;
-    
     private String userId;
-
-    public Product(String id, String name, String description, Double price, String userId) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.userId = userId;
-    }
 
 }

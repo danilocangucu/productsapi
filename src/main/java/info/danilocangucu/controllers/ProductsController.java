@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import java.net.URI;
 
+import info.danilocangucu.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import org.springframework.data.domain.Pageable;
-
 import info.danilocangucu.models.Product;
 import info.danilocangucu.repositories.ProductRepository;
 import info.danilocangucu.repositories.UserRepository;
@@ -37,15 +36,14 @@ import lombok.RequiredArgsConstructor;
 public class ProductsController {
 
     private final ProductService productService;
+    private final UserService userService;
 
     @Autowired
     ProductRepository productRepository;
-    @Autowired
-    UserRepository userRepository;
 
     @GetMapping("/public/products")
     @JsonView(PublicProductView.class)
-    public ResponseEntity<List<Product>> findAll(Pageable pageable) {
+    public ResponseEntity<List<Product>> findAll() {
         List<Product> products = productRepository.findAll();
         if (products.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -60,7 +58,7 @@ public class ProductsController {
             @RequestHeader("Authorization") String authHeader,
             UriComponentsBuilder ucb) {
             request.setUserId(
-                productService.getUserIdFromHeader(authHeader)
+                userService.getUserIdFromHeader(authHeader)
             );
             Product createdProduct = productService.save(request);
 
@@ -77,7 +75,7 @@ public class ProductsController {
     public ResponseEntity<Product> findById(
             @PathVariable String requestedId,
             @RequestHeader("Authorization") String authHeader) {
-        String userId = productService.getUserIdFromHeader(authHeader);
+        String userId = userService.getUserIdFromHeader(authHeader);
         Product product = findProduct(requestedId, userId);
         if (product != null) {
             return ResponseEntity.ok(product);
@@ -91,7 +89,7 @@ public class ProductsController {
         @PathVariable String requestedId,
         @RequestBody Product productUpdate,
         @RequestHeader("Authorization") String authHeader) {
-            String userId = productService.getUserIdFromHeader(authHeader);
+            String userId = userService.getUserIdFromHeader(authHeader);
             Product product = findProduct(requestedId, userId);
             if (product != null) {
                 Product updatedProduct = new Product(
@@ -111,7 +109,7 @@ public class ProductsController {
     private ResponseEntity<Void> deleteProduct(
         @PathVariable String id,
         @RequestHeader("Authorization") String authHeader) {
-            String userId = productService.getUserIdFromHeader(authHeader);
+            String userId = userService.getUserIdFromHeader(authHeader);
             if (productRepository.existsByIdAndUserId(id, userId)) {
                 productRepository.deleteById(id);
                 return ResponseEntity.noContent().build();

@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final info.danilocangucu.shop.configs.JwtAuthenticationFilter jwtAuthFilter;
+    private final info.danilocangucu.configs.JwtAuthenticationFilter jwtAuthFilter;
 
     private final AuthenticationProvider authenticationProvider;
     

@@ -3,6 +3,9 @@ package info.danilocangucu.models;
 import java.util.Collection;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import info.danilocangucu.views.CreatedProductView;
+import info.danilocangucu.views.UserView;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,17 +29,13 @@ import lombok.NoArgsConstructor;
 public class User implements UserDetails {
     @Id
     private String id;
+    @JsonView(UserView.class)
     private String name;
+    @JsonView(UserView.class)
     private String email;
     private String password;
+    @JsonView(UserView.class)
     private String role;
-    
-    public User(String name, String email, String password, String role) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

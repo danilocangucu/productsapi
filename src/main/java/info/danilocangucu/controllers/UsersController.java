@@ -2,121 +2,73 @@ package info.danilocangucu.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import info.danilocangucu.models.Product;
+import info.danilocangucu.models.User;
 import info.danilocangucu.repositories.ProductRepository;
 import info.danilocangucu.repositories.UserRepository;
-import info.danilocangucu.services.ProductService;
+import info.danilocangucu.services.UserService;
 import info.danilocangucu.views.CreatedProductView;
 import info.danilocangucu.views.PublicProductView;
+import info.danilocangucu.views.UserView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
 public class UsersController {
-
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    ProductRepository productRepository;
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/public/products")
-    @JsonView(PublicProductView.class)
-    public ResponseEntity<List<Product>> findAll(Pageable pageable) {
-        List<Product> products = productRepository.findAll();
-        if (products.isEmpty()) {
+    @GetMapping("/private/users")
+    @JsonView(UserView.class)
+    public ResponseEntity<User> findUser(
+            @RequestHeader("Authorization") String authHeader) {
+        String userId = userService.getUserIdFromHeader(authHeader);
+        Optional<User> user = userRepository.findById(userId);
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .build());
+
+    }
+
+    @PutMapping("/private/users")
+    private ResponseEntity<Void> putProduct(
+            @RequestBody User userUpdate,
+            @RequestHeader("Authorization") String authHeader) {
+        String userId = userService.getUserIdFromHeader(authHeader);
+        if (!userRepository.existsById(userId)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(products);
+        User updatedUser = new User (
+                userId,
+          userUpdate.getName(),
+          userUpdate.getEmail(),
+          passwordEncoder.encode(userUpdate.getPassword()),
+                "ROLE_USER"
+        );
+        userRepository.save(updatedUser);
+        return ResponseEntity.noContent().build();
     }
 
-    @JsonView(CreatedProductView.class)
-    @PostMapping("/private/products")
-    public ResponseEntity<Void> createProduct(
-            @RequestBody Product request,
-            @RequestHeader("Authorization") String authHeader,
-            UriComponentsBuilder ucb) {
-            request.setUserId(
-                productService.getUserIdFromHeader(authHeader)
-            );
-            Product createdProduct = productService.save(request);
-
-            URI locationOfNewProduct = ucb
-                .path("private/products/{id}")
-                .buildAndExpand(createdProduct.getId())
-                .toUri();
-
-        return ResponseEntity.created(locationOfNewProduct).build();
-    }
-
-    @JsonView(PublicProductView.class)
-    @GetMapping("/private/products/{requestedId}")
-    public ResponseEntity<Product> findById(
-            @PathVariable String requestedId,
-            @RequestHeader("Authorization") String authHeader) {
-        String userId = productService.getUserIdFromHeader(authHeader);
-        Product product = findProduct(requestedId, userId);
-        if (product != null) {
-            return ResponseEntity.ok(product);
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    @DeleteMapping("/private/users")
+    private ResponseEntity<Void> deleteUser(@RequestHeader("Authorization") String authHeader) {
+        String userId = userService.getUserIdFromHeader(authHeader);
+        if (!userRepository.existsById(userId)) {
+            return ResponseEntity.notFound().build();
         }
-    }
-
-    @PutMapping("/private/products/{requestedId}")
-    private ResponseEntity<Void> putProduct(
-        @PathVariable String requestedId,
-        @RequestBody Product productUpdate,
-        @RequestHeader("Authorization") String authHeader) {
-            String userId = productService.getUserIdFromHeader(authHeader);
-            Product product = findProduct(requestedId, userId);
-            if (product != null) {
-                Product updatedProduct = new Product(
-                    requestedId,
-                    productUpdate.getName(),
-                    productUpdate.getDescription(),
-                    productUpdate.getPrice(),
-                    userId);
-
-                productRepository.save(updatedProduct);
-                return ResponseEntity.noContent().build();
-            }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
-
-    @DeleteMapping("/private/products/{id}")
-    private ResponseEntity<Void> deleteProduct(
-        @PathVariable String id,
-        @RequestHeader("Authorization") String authHeader) {
-            String userId = productService.getUserIdFromHeader(authHeader);
-            if (productRepository.existsByIdAndUserId(id, userId)) {
-                productRepository.deleteById(id);
-                return ResponseEntity.noContent().build();
-            }
-        
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
-
-    private Product findProduct(String requestedId, String userId) {
-        Optional<Product> searchedProduct = productRepository.findById(requestedId);
-        if (searchedProduct.isEmpty()) {
-            return null;
-        }
-
-        Product foundProduct = searchedProduct.get();
-        if (!foundProduct.getUserId().equals(userId)) { return null; }
-        
-        return foundProduct;
+        userRepository.deleteById(userId);
+        return ResponseEntity.noContent().build();
     }
 }
