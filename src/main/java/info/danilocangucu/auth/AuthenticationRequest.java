@@ -1,5 +1,11 @@
 package info.danilocangucu.auth;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import info.danilocangucu.views.UserView;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +16,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationRequest {
+    @NotNull(message = "Email cannot be null")
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Email should be valid")
+    @Size(min=1, max=40, message = "Email must be between 1 and 40 characters")
+    @JsonView(UserView.class)
     private String email;
+
+    @NotNull(message = "Password cannot be null")
+    @NotBlank(message = "Password cannot be blank")
+    @Size(min=1, max=20, message = "Password must be between 1 and 20 characters")
     private String password;
 }

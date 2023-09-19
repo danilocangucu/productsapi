@@ -33,23 +33,28 @@ import lombok.NoArgsConstructor;
 public class User implements UserDetails {
     @Id
     private String id;
-    @NotNull
-    @NotBlank
-    @Size(min=1, max=20)
+
+    @NotNull(message = "Name cannot be null")
+    @NotBlank(message = "Name cannot be blank")
+    @Size(min=1, max=20, message = "Name must be between 1 and 20 characters")
     @JsonView(UserView.class)
     private String name;
-    @NotNull
-    @NotBlank
-    @Email
-    @Size(min=1, max=40)
+
+    @NotNull(message = "Email cannot be null")
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Email should be valid")
+    @Size(min=1, max=40, message = "Email must be between 1 and 40 characters")
     @JsonView(UserView.class)
     private String email;
-    @NotNull
-    @NotBlank
-    @Size(min=1, max=20)
+
+    @NotNull(message = "Password cannot be null")
+    @NotBlank(message = "Password cannot be blank")
+    @Size(min=1, max=20, message = "Password must be between 1 and 20 characters")
     private String password;
+
     @JsonView(UserView.class)
     private String role;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
