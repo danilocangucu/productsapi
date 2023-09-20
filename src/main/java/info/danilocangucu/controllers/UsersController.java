@@ -64,4 +64,26 @@ public class UsersController {
         userRepository.deleteById(userId);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/private/users/{id}")
+    @JsonView(UserView.class)
+    public ResponseEntity<?> deleteUser(
+            @RequestHeader("Authorization") String authHeader,
+            @PathVariable String id) {
+        String userId = userService.getUserIdFromHeader(authHeader);
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        User admin = user.get();
+        if (!admin.getRole().equals("ROLE_ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
 }
