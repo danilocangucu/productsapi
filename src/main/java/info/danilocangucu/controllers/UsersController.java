@@ -1,24 +1,17 @@
 package info.danilocangucu.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import info.danilocangucu.models.Product;
 import info.danilocangucu.models.User;
-import info.danilocangucu.repositories.ProductRepository;
 import info.danilocangucu.repositories.UserRepository;
 import info.danilocangucu.services.UserService;
-import info.danilocangucu.views.CreatedProductView;
-import info.danilocangucu.views.PublicProductView;
 import info.danilocangucu.views.UserView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
-import java.net.URI;
 import java.util.Optional;
 
 @RestController

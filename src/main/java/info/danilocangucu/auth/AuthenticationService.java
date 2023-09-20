@@ -2,8 +2,8 @@ package info.danilocangucu.auth;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
-import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,8 +19,8 @@ import lombok.RequiredArgsConstructor;
 
 import jakarta.validation.Validator;
 
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -34,14 +34,10 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-
     public AuthenticationResponse register(User request) {
         Set<ConstraintViolation<User>> violations = validator.validate(request);
         if (!violations.isEmpty()) {
             buildStringAndThrowException(violations);
-        } else if (emailExists(request.getEmail()).isPresent()) {
-            //
-            buildStringAndThrowException(new HashSet<>());
         }
 
         var user = User.builder()
@@ -82,16 +78,19 @@ public class AuthenticationService {
     private static <T> void buildStringAndThrowException(Set<ConstraintViolation<T>> violations) {
         System.out.println("buildString");
         StringBuilder sb = new StringBuilder();
-        if (violations.isEmpty()) {
-        }
+
         for (ConstraintViolation<T> violation : violations) {
             sb.append(violation.getMessage()).append(". ");
         }
-        throw new ConstraintViolationException("Error occurred: " + sb.toString(), violations);
+        throw new ConstraintViolationException("Error occurred: " + sb, violations);
     }
 
-    private Optional<User> emailExists(String email) {
-        return userRepository.findByEmail(email);
+    public static ResponseEntity<?> responseWithError(String message) {
+        Map<String, String> errorResponse = Collections.singletonMap("error", message);
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
     }
 
 }

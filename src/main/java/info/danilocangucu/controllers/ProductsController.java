@@ -126,7 +126,6 @@ public class ProductsController {
 
         Product foundProduct = searchedProduct.get();
         if (!foundProduct.getUserId().equals(userId)) { return null; }
-        
         return foundProduct;
     }
 }

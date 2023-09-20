@@ -2,6 +2,8 @@ package info.danilocangucu.controllers;
 
 import info.danilocangucu.exception.ValidationException;
 import info.danilocangucu.models.User;
+import info.danilocangucu.repositories.UserRepository;
+
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -16,7 +18,6 @@ import info.danilocangucu.auth.AuthenticationResponse;
 import info.danilocangucu.auth.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,15 +27,20 @@ import java.util.stream.Collectors;
 public class AuthenticationController {
 
     private final AuthenticationService service;
+    private final UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<?> register(
         @Valid @RequestBody User request,
         BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
-            System.out.println("has errors");
             createAndSendErrorResponse(bindingResult);
+        } else if (userRepository
+                .findByEmail(request.getEmail())
+                .isPresent())
+        {
+            return AuthenticationService.responseWithError("Email already registered");
         }
         return ResponseEntity.ok(service.register(request));
     }
