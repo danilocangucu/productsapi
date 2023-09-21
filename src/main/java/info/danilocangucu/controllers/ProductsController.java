@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.net.URI;
 
 import info.danilocangucu.services.UserService;
+import info.danilocangucu.views.PrivateProductView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,6 @@ import info.danilocangucu.models.Product;
 import info.danilocangucu.repositories.ProductRepository;
 import info.danilocangucu.repositories.UserRepository;
 import info.danilocangucu.services.ProductService;
-import info.danilocangucu.views.CreatedProductView;
 import info.danilocangucu.views.PublicProductView;
 import lombok.RequiredArgsConstructor;
 
@@ -51,7 +51,16 @@ public class ProductsController {
         return ResponseEntity.ok(products);
     }
 
-    @JsonView(CreatedProductView.class)
+    @GetMapping("/private/products")
+    @JsonView(PrivateProductView.class)
+    public ResponseEntity<List<Product>> findAllFromUser(
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        String userId = userService.getUserIdFromHeader(authHeader);
+        return ResponseEntity.ok(productService.findAllFromUser(userId));
+    }
+
+    @JsonView(PrivateProductView.class)
     @PostMapping("/private/products")
     public ResponseEntity<Void> createProduct(
             @RequestBody Product request,

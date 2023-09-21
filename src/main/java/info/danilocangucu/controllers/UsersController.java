@@ -83,7 +83,7 @@ public class UsersController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/private/users/{id}")
+    @DeleteMapping("/private/admin/users/{id}")
     @JsonView(UserView.class)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteUser(

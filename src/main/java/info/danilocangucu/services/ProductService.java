@@ -9,6 +9,7 @@ import info.danilocangucu.repositories.ProductRepository;
 import info.danilocangucu.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,5 +29,9 @@ public class ProductService {
             .build();
 
         return productRepository.save(product);
+    }
+
+    public List<Product> findAllFromUser(String userId) {
+        return productRepository.findByUserId(userId);
     }
 }

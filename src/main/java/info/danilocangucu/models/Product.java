@@ -1,5 +1,6 @@
 package info.danilocangucu.models;
 
+import info.danilocangucu.views.PrivateProductView;
 import lombok.*;
 
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import info.danilocangucu.views.CreatedProductView;
 import info.danilocangucu.views.PublicProductView;
 
 @Data
@@ -21,7 +21,7 @@ import info.danilocangucu.views.PublicProductView;
 @Document(collection = "products")
 public class Product {
     @Id
-    @JsonView(CreatedProductView.class)
+    @JsonView(PrivateProductView.class)
     private String id;
     @NotNull
     @NotBlank
