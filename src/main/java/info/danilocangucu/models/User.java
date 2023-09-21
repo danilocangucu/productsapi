@@ -3,6 +3,7 @@ package info.danilocangucu.models;
 import java.util.Collection;
 import java.util.List;
 
+import info.danilocangucu.views.AdminView;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,13 +26,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "users")
 public class User implements UserDetails {
     @Id
+    @JsonView(AdminView.class)
     private String id;
 
     @NotNull(message = "Name cannot be null")

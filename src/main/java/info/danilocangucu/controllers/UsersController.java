@@ -2,16 +2,22 @@ package info.danilocangucu.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import info.danilocangucu.models.User;
+import info.danilocangucu.repositories.ProductRepository;
 import info.danilocangucu.repositories.UserRepository;
 import info.danilocangucu.services.UserService;
+import info.danilocangucu.views.AdminView;
 import info.danilocangucu.views.UserView;
+import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,17 +29,28 @@ public class UsersController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    ProductRepository productRepository;
+
 
     @GetMapping("/private/users")
+    @PermitAll
     @JsonView(UserView.class)
-    public ResponseEntity<User> findUser(
+    public ResponseEntity<?> findUser(
             @RequestHeader("Authorization") String authHeader) {
         String userId = userService.getUserIdFromHeader(authHeader);
         Optional<User> user = userRepository.findById(userId);
+
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .build());
+    }
 
+    @GetMapping("/private/admin/users")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @JsonView(AdminView.class)
+    public ResponseEntity<?> findAllUsers() {
+        return ResponseEntity.ok(userRepository.findAll());
     }
 
     @PutMapping("/private/users")
@@ -56,6 +73,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/private/users")
+    @Secured("ROLE_USER")
     private ResponseEntity<Void> deleteUser(@RequestHeader("Authorization") String authHeader) {
         String userId = userService.getUserIdFromHeader(authHeader);
         if (!userRepository.existsById(userId)) {
@@ -67,19 +85,16 @@ public class UsersController {
 
     @DeleteMapping("/private/users/{id}")
     @JsonView(UserView.class)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteUser(
             @RequestHeader("Authorization") String authHeader,
             @PathVariable String id) {
-        String userId = userService.getUserIdFromHeader(authHeader);
-        Optional<User> user = userRepository.findById(userId);
+        Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        User admin = user.get();
-        if (!admin.getRole().equals("ROLE_ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
         if (userRepository.existsById(id)) {
+            productRepository.deleteAllByUserId(id);
             userRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         }

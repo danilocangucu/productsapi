@@ -17,9 +17,6 @@ import info.danilocangucu.views.PublicProductView;
 
 @Data
 @Builder
-@Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "products")
 public class Product {
