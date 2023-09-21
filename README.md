@@ -6,86 +6,134 @@ This is a project that builds a RESTful API using Spring Boot and MongoDB.
 
 Before you begin, ensure you have met the following requirements:
 
-- [Java Development Kit (JDK) 17](https://www.oracle.com/java/technologies/javase-downloads.html) or higher installed
-- [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) (more details in [MongoDB Settings](#mongodb-settings))
-- [Gradle](https://gradle.org/) build tool installed (for building the project)
+- Java Development Kit (JDK) 17 or higher installed
+- Gradle build tool installed (for building the project)
+- [Postman](https://www.postman.com/) (recommended for testing the API)
 
 ## Getting Started
 
 1. Clone this repository:
 
-   ```shell
+   ```
    git clone https://github.com/danilocangucu/spring-mongodb-atlas-shop-api.git
+   ```
 
 2. Change to the project directory:
 
-   ```shell
+   ```
    cd spring-mongodb-atlas-shop-api
    ```
 
-3. Configure MongoDB connection in `src/main/resources/application.properties`:
+3. Build and run the application:
 
-   ```properties
-   spring.data.mongodb.uri=mongodb://<username>:<password>@<host>/<database>?retryWrites=true&w=majority
-   spring.data.mongodb.database=<database>
    ```
-
-4. Build and run the application:
-
-   ```shell
    ./gradlew bootRun
    ```
 
-5. The application will be accessible at [http://localhost:8080](http://localhost:8080).
+   The application will be accessible at https://localhost:443.
 
 ## API Endpoints
 
+### Products Controller Endpoints:
+
 - **GET /public/products**: Retrieve a list of products. The response excludes the "userId" field.
-- **POST /public/register**: Receives data to create a new user.
-- **POST /public/authenticate**: Receives data to authenticate an existing user. Responds with a valid JWT.
-- **POST /private/newproduct**: Receives data to create a new product. Responds with created product.
+- **POST /private/products**: Create a new product.
+- **GET /private/products/{requestedId}**: Retrieve a product by ID.
+- **PUT /private/products/{requestedId}**: Update a product by ID.
+- **DELETE /private/products/{id}**: Delete a product by ID.
+- **GET /private/products**: Retrieve a list of products from the current user.
 
-## MongoDB Settings
+### Users Controller Endpoints:
 
-You should have the following three documents inside collection named "products" on your MongoDB Atlas database:
+- **GET /private/users**: Retrieve the current user's information.
+- **GET /private/admin/users**: Retrieve a list of all users.
+- **PUT /private/users**: Update the current user's information.
+- **DELETE /private/users**: Delete the current user's account.
+- **DELETE /private/admin/users/{id}**: Delete a user by ID (Admin Only).
 
-1. Document 1:
-   ```json
-   {"_id":{"$oid":"64f714f0c468d71fbc8e0bef"},"name":"Lamp","description":"Contemporary lamp","price":{"$numberDouble":"9.99"},"userId":"123"}
-   ```
+### Authenticate Controller Endpoints:
 
-2. Document 2:
-   ```json
-   {"_id":{"$oid":"64f715bcc468d71fbc8e0bf0"},"name":"Coffee Table","description":"Modern glass coffee table with chrome accents","price":{"$numberDouble":"149.99"},"userId":"456"}
-   ```
+- **POST /public/register**: Register a new user.
+- **POST /public/authenticate**: Authenticate an existing user.
 
-3. Document 3:
-   ```json
-   {"_id":{"$oid":"64f71661c468d71fbc8e0bf1"},"name":"Smartphone","description":"High-end smartphone with cutting-edge features","price":{"$numberDouble":"699.99"},"userId":"789"}
-   ```
+Please note that the endpoints under `/private` require authentication, and the endpoints under `/admin` require admin role authorization.
 
-## Running Tests
+## Obtaining Product IDs with Postman
 
-To run tests for this project, follow these steps:
+In this project, product IDs are automatically generated when you create a new product. To find the product ID for a specific product using Postman, follow these steps:
 
-1. In one terminal window, run the application as shown previously.
+1. **Create a New Product**:
 
-2. Then, open another terminal window and navigate to the project directory:
+   - Open Postman and create a new POST request.
+   - Set the request URL to `https://localhost:443/private/products`.
+   - In the Headers section, add a key `Authorization` with a value of `Bearer <your-jwt-token>` to authenticate the request. Replace `<your-jwt-token>` with your actual JWT token.
+   - In the Body section, select `raw` and enter the JSON data for the new product:
 
-   ```shell
-   cd spring-boot-mongodb-products-api
-   ```
+     ```json
+     {
+         "name": "New Product",
+         "description": "Description of the new product",
+         "price": 19.99
+     }
+     ```
 
-3. Run the following command to execute tests:
+   - Send the request. Upon successful creation, the API will respond with a `201 Created` status code, and the `Location` header of the response will contain the URL of the newly created product, including its unique ID.
 
-   ```shell
-   ./gradlew test
-   ```
+2. **Retrieve a List of Products**:
 
-   This will run the tests and provide test results in the terminal.
+   - Open Postman and create a new GET request.
+   - Set the request URL to `https://localhost:443/public/products`.
+   - Send the request. The response will include product details, including their IDs.
 
-## License
+3. **Use the Product ID**:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+   - Once you have obtained the product ID from the creation request or the list of products, you can use it in subsequent requests to interact with the specific product, such as updating or deleting it.
 
-You can copy and paste this updated template into your README.md file on GitHub. Don't forget to replace `<username>`, `<password>`, `<host>`, and `<database>` in the MongoDB connection string with your actual MongoDB credentials and database information.
+## User Registration with Postman
+
+To register a new user using Postman, follow these steps:
+
+1. **Register a New User**:
+
+   - Open Postman and create a new POST request.
+   - Set the request URL to `https://localhost:443/public/register`.
+   - In the Body section, select `raw` and enter the JSON data for the new user:
+
+     ```json
+     {
+         "name": "John Doe",
+         "email": "johndoe@example.com",
+         "password": "securepassword"
+     }
+     ```
+
+   - Send the request. Upon successful registration, the API will respond with a confirmation message.
+
+## User Authentication with Postman
+
+To authenticate an existing user using Postman, follow these steps:
+
+1. **Authenticate User**:
+
+   - Open Postman and create a new POST request.
+   - Set the request URL to `https://localhost:443/public/authenticate`.
+   - In the Body section, select `raw` and enter the JSON data for the user's credentials:
+
+     ```json
+     {
+         "email": "johndoe@example.com",
+         "password": "securepassword"
+     }
+     ```
+
+   - Send the request. Upon successful authentication, the API will respond with a valid JWT token, which can be used for accessing protected endpoints.
+
+## Available Users from the Database
+
+- User:
+  - Username: user123
+  - Password: user123
+
+- Admin:
+  - Username: admin123
+  - Password: admin123
