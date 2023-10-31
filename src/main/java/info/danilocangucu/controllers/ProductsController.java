@@ -71,9 +71,8 @@ public class ProductsController {
             @RequestHeader("Authorization") String authHeader,
             UriComponentsBuilder ucb
             ) {
-            if (bindingResult.hasErrors()) {
-                createAndSendErrorResponse(bindingResult);
-            }
+            if (bindingResult.hasErrors()) { createAndSendErrorResponse(bindingResult); }
+
             request.setUserId(
                     userService.getUserIdFromHeader(authHeader)
             );
@@ -102,9 +101,12 @@ public class ProductsController {
     @PutMapping("/private/products/{requestedId}")
     private ResponseEntity<Void> putProduct(
         @PathVariable String requestedId,
-        @RequestBody Product productUpdate,
+        @Valid @RequestBody Product productUpdate,
+        BindingResult bindingResult,
         @RequestHeader("Authorization") String authHeader) {
-            String userId = userService.getUserIdFromHeader(authHeader);
+        if (bindingResult.hasErrors()) { createAndSendErrorResponse(bindingResult); }
+
+        String userId = userService.getUserIdFromHeader(authHeader);
             Product product = findProduct(requestedId, userId);
             if (product != null) {
                 Product updatedProduct = new Product(

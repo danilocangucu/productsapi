@@ -4,10 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import info.danilocangucu.views.AdminView;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import info.danilocangucu.views.UserView;
@@ -20,9 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -36,6 +30,7 @@ public class User implements UserDetails {
     @NotNull(message = "Name cannot be null")
     @NotBlank(message = "Name cannot be blank")
     @Size(min=1, max=20, message = "Name must be between 1 and 20 characters")
+    @Pattern(regexp = "^[a-zA-Z]*$", message = "Name must contain only letters")
     @JsonView(UserView.class)
     private String name;
 

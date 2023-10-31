@@ -7,18 +7,21 @@ import info.danilocangucu.repositories.UserRepository;
 import info.danilocangucu.services.UserService;
 import info.danilocangucu.views.AdminView;
 import info.danilocangucu.views.UserView;
+import static info.danilocangucu.controllers.AuthenticationController.createAndSendErrorResponse;
 import jakarta.annotation.security.PermitAll;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping
@@ -55,8 +58,13 @@ public class UsersController {
 
     @PutMapping("/private/users")
     private ResponseEntity<Void> putProduct(
-            @RequestBody User userUpdate,
+            @Valid @RequestBody User userUpdate,
+            BindingResult bindingResult,
             @RequestHeader("Authorization") String authHeader) {
+        if (bindingResult.hasErrors()) {
+            createAndSendErrorResponse(bindingResult);
+        }
+
         String userId = userService.getUserIdFromHeader(authHeader);
         if (!userRepository.existsById(userId)) {
             return ResponseEntity.notFound().build();
