@@ -54,7 +54,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
-    private static void createAndSendErrorResponse(BindingResult bindingResult) {
+    static void createAndSendErrorResponse(BindingResult bindingResult) {
         List<String> errors = bindingResult.getAllErrors()
                 .stream()
                 .map(ObjectError::getDefaultMessage)

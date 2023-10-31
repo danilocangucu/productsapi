@@ -7,9 +7,11 @@ import java.net.URI;
 
 import info.danilocangucu.services.UserService;
 import info.danilocangucu.views.PrivateProductView;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,10 +27,11 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import info.danilocangucu.models.Product;
 import info.danilocangucu.repositories.ProductRepository;
-import info.danilocangucu.repositories.UserRepository;
 import info.danilocangucu.services.ProductService;
 import info.danilocangucu.views.PublicProductView;
 import lombok.RequiredArgsConstructor;
+
+import static info.danilocangucu.controllers.AuthenticationController.createAndSendErrorResponse;
 
 @RestController
 @RequestMapping
@@ -63,19 +66,22 @@ public class ProductsController {
     @JsonView(PrivateProductView.class)
     @PostMapping("/private/products")
     public ResponseEntity<Void> createProduct(
-            @RequestBody Product request,
+            @Valid @RequestBody Product request,
+            BindingResult bindingResult,
             @RequestHeader("Authorization") String authHeader,
-            UriComponentsBuilder ucb) {
+            UriComponentsBuilder ucb
+            ) {
+            if (bindingResult.hasErrors()) {
+                createAndSendErrorResponse(bindingResult);
+            }
             request.setUserId(
-                userService.getUserIdFromHeader(authHeader)
+                    userService.getUserIdFromHeader(authHeader)
             );
             Product createdProduct = productService.save(request);
-
             URI locationOfNewProduct = ucb
                 .path("private/products/{id}")
                 .buildAndExpand(createdProduct.getId())
                 .toUri();
-
         return ResponseEntity.created(locationOfNewProduct).build();
     }
 

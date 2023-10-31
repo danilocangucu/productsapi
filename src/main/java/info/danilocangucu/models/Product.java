@@ -23,21 +23,20 @@ public class Product {
     @Id
     @JsonView(PrivateProductView.class)
     private String id;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Product name cannot be null")
+    @NotBlank(message = "Product name cannot be blank")
     @Size(min=3, max=30, message="Name must be between 3 and 30 characters")
     @JsonView(PublicProductView.class)
     private String name;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Product description cannot be null")
+    @NotBlank(message = "Product description cannot be blank")
     @Size(min=10, max=50, message="Description must be between 10 and 50 characters")
     @JsonView(PublicProductView.class)
     private String description;
     @JsonView(PublicProductView.class)
-    @NotNull
-    @NotBlank
-    @Digits(integer = 10, fraction = 2, message = "Price must be a valid decimal number")    private Double price;
-    @NotNull
+    @NotNull(message = "Product price cannot be null")
+    @Digits(integer = 10, fraction = 2, message = "Price must be a valid decimal number")
+    private Double price;
     private String userId;
 
 }
