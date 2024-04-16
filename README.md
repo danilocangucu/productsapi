@@ -1,4 +1,4 @@
-# Spring + MongoDB Atlas Shop API
+# Spring + MongoDB Shop API
 
 This is a project that builds a RESTful API using Spring Boot and MongoDB.
 
