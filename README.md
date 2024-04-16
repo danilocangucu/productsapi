@@ -1,4 +1,4 @@
-# Spring + MongoDB Shop API
+# SpringCommerce (RESTful API for E-Commerce)
 
 This is a project that builds a RESTful API using Spring Boot and MongoDB.
 
